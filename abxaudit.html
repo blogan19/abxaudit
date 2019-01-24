@@ -1,0 +1,609 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+	<title></title>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+
+     <style type="text/css">    	
+     .centre{
+     	text-align: center;
+     }
+     .alertLbl{
+     	margin-left: 10px;
+     }
+     .invis{
+     	display: none;
+     }
+     </style>
+</head>
+<body>
+
+<div id="s1">
+	<div class="section">
+		<div class="container">
+			<div class="row">
+				<div class="input-field col s6">
+					<input placeholder="Hospital Number"  type="text" class="validate" maxlength="8" id="hnInput">
+				</div>
+				<div class="input-field col s6">
+					<input placeholder="Consultant"  type="text" class="validate" id="conInput">
+				</div>          
+			</div>
+			<div class="input-field col s12">
+			    <select id="wardSelect">
+			    </select>
+		 	 </div>  
+		</div>
+	</div>
+
+	<div class="divider"></div>
+	<div class="section">
+		<div class="container">
+			<div class="col s12 centre">
+			 	<div class="switch">
+			 		<label>NKDA<input type="checkbox" onclick="allergy()" id="allergyChk"><span class="lever"></span>Allergy</label>
+		      	</div>	 
+		      	<div class="input-field">
+			        <input id="allergyText" class="invis autocomplete" placeholder="Add Allergies">
+			    </div>	
+			    <form class="col s12 centre">
+					<p>
+					    <label class="alertLbl"><input type="checkbox" id="ICM"/><span>ICM</span></label>
+					    <label class="alertLbl"><input type="checkbox" id="ICC"/><span>ICC</span></label>
+					    <label class="alertLbl"><input type="checkbox" id="PTP"/><span>PTP</span></label>
+					    <label class="alertLbl"><input type="checkbox" id="VRE"/><span>VRE</span></label>
+			    	</p>
+				</form>
+			</div>
+	    </div>
+	</div>
+
+	<div class="divider"></div>
+	<div class="section">
+		<div class="container">
+			<div class="input-field col s12">
+			    <select  id="antibioticSelect" onchange="antibioticSelected()">
+			    </select>
+			    
+			</div>
+		</div>
+	</div>
+</div>
+
+
+<div id="s2" class="section invis">
+	<form class="col s12 centre container" id="doseForm">
+		<div class="row">
+			<p>
+			    <label class="alertLbl"><input type="radio" name="route" value="IV"/><span>IV</span></label>
+			    <label class="alertLbl"><input type="radio" name="route" value="Oral"/><span>Oral</span></label>
+			    <label class="alertLbl"><input type="radio" name="route" value="IM"/><span>IM</span></label>
+			    <label class="alertLbl"><input type="radio" name="route" value="IO"/><span>IO</span></label>
+			</p>
+			<div class="input-field col s6">
+	          <input placeholder="Dose" id="doseInput" type="text">
+	        </div>
+	        <div class="input-field col s6">
+	        	<select id="FrequencySelect"></select>
+	       	</div>
+		</div>	
+		 <a class="waves-effect waves-light btn" onclick="stage2()">Next</a>
+	    
+	</form>
+</div>
+
+<div id="s3" class="section invis">
+	<div class="container col s12">
+		<ul class="collection">
+			<li class="collection-item active" id="drugTitle"></li>
+		</ul>
+		<div id="s4">
+		<div class="row">
+	        <div class="input-field col s6">
+	          <input placeholder="Doses Missed" id="dosesMissed" type="number" class="validate">	        
+	        </div>
+	        <div class="input-field col s6">
+	          <input placeholder="Doses Prescribed" id="dosesPrescribed" type="number" class="validate">
+	        </div>
+	        <div class="input-field col s12">
+	          <input placeholder="Reason doses Missed" class="invis" id="reasonMissed" type="text" class="validate">
+	        </div>
+      </div>
+    <div class="divider"></div>
+    	<br>
+		<div class="input-field col s12">
+			<label><input type="checkbox" id="indicationDocumented"/><span>Indication documented on initiation</span></label><br>
+			<input placeholder="Indication"  type="text" class="validate" id="indicationInput">		
+		</div>
+		<div class="divider"></div>
+		<form class="col s12 centre container" id="approvedForm">
+			<div class="switch centre">
+			 		<label>Not Approved<input type="checkbox" onclick="approval()" id="approvalChk"><span class="lever"></span>Approved</label>
+		      	</div>	 
+			
+			<p class="invis" id="approvalOpt">
+			    <label class="alertLbl"><input type="radio" name="approved" value="policy"/><span>As Per Policy</span></label>
+			    <label class="alertLbl"><input type="radio" name="approved" value="advice"/><span>As Per Advice</span></label>
+			    <label class="alertLbl"><input type="radio" name="approved" value="culture"/><span>As Per culture</span></label>
+			    <label class="alertLbl"><input type="radio" name="approved" value="retro"/><span>Approved retrospectively</span></label>
+			</p>
+			<br>
+		</div>
+		<div class="divider"></div>
+		<br>
+		<div class="input-field col s12">
+			<label><input type="checkbox" id="stopDocumented"  onclick="$('#rvDates').toggle()"/><span>Stop/Review date documented?</span></label><br>
+			<input placeholder="Stop/Review Date"  type="text" class="validate invis" id="rvDates">		
+			<a class="waves-effect waves-light btn" onclick="$('#s3').hide();$('#s4').hide();$('#s5').show();$('#commentsForm').show();stage3()">Next</a>
+		</div>		
+	</div>
+</div>
+</div>
+
+<div id="s5" class="section invis">
+	<form class="col s12 centre container" id="rvForm">
+		<div class="input-field col s12 container">
+				<label><input type="checkbox" id="rvDocumented"  onclick="$('#rvOpts').toggle();$('#rvCompletedBy').toggle()"/><span>Documented 72 hours review?</span></label><br><br>
+			<div id="rvOpts" class="invis container">
+					<h5> Review Decision </h5>
+					<p>
+				      <label><input  type="radio" name="rv" value="Stop" /><span>Stop</span></label>
+	    			</p>
+	    			<p>
+				      <label><input  type="radio" name="rv" value="Continue(to date given)" /><span>Continue(to date given)</span></label>
+	    			</p>
+	    			<p>
+				      <label><input  type="radio" name="rv" value="Continue(no date given)" /><span>Continue(no date given)</span></label>
+	    			</p>
+	    			<p>
+				      <label><input  type="radio" name="rv" value="Switch(escalation)" /><span>Switch(escalation)</span></label>
+	    			</p>
+	    			<p>
+				      <label><input  type="radio" name="rv" value="Switch(de-escalation)" /><span>Switch(de-escalation)</span></label>
+	    			</p>
+	    			<p>
+				      <label><input  type="radio" name="rv" value="Switch(allergy/intolerance)" /><span>Switch(allergy/intolerance)</span></label>
+	    			</p>
+	    			<p>
+				      <label><input  type="radio" name="rv" value="IVOST (to date given)" /><span>IVOST (to date given)</span></label>
+	    			</p>
+	    			<p>
+				      <label><input  type="radio" name="rv" value="IVOST (no date given)" /><span>IVOST (no date given)</span></label>
+	    			</p>
+	    			<p>
+				      <label><input  type="radio" name="rv" value="OPAT" /><span>OPAT</span></label>
+	    			</p>
+				</div>				
+		</div>
+		<div class="input-field col s12 invis container" id="rvCompletedBy">
+			<div class="container">
+					<h5> Review Decision By:</h5>
+					<p>
+				      <label><input  type="radio" name="rvBy" value="Senior Infection Doctor" /><span>Senior Infection Doctor</span></label>
+	    			</p>
+	    			<p>
+				      <label><input  type="radio" name="rvBy" value="Antibiotic Pharmacist" /><span>Antibiotic Pharmacist</span></label>
+	    			</p>
+	    			<p>
+				      <label><input  type="radio" name="rvBy" value="Senior Member of Team" /><span>Senior Member of Team</span></label>
+	    			</p>
+	    			<p>
+				      <label><input  type="radio" name="rvBy" value="Junior Member of Team" /><span>Junior Member of Team</span></label>
+	    			</p>
+	    			<p>
+				      <label><input  type="radio" name="rvBy" value="Other" /><span>Other</span></label>
+	    			</p>		
+	    	</div>	
+		</div>
+		<div class="input-field col s12 container">
+				<label><input type="checkbox" id="sampleSentChk" onclick="$('#sampleOpts').toggle()" /><span>Sample Sent for culture?</span></label><br><br>
+					 
+					<p id="sampleOpts" class="container invis">
+						Sample results reviewed?
+				      <label><input  type="radio" name="sampleRv" value="Yes" /><span>Yes</span></label>
+	 
+				      <label><input  type="radio" name="sampleRv" value="No" /><span>No</span></label>
+	    			
+				      <label><input  type="radio" name="sampleRv" value="N/A" /><span>N/A</span></label>
+	    			</p>
+							
+		</div>
+
+	
+	      <div class="row invis container" id="commentsForm">
+	        <div class="input-field col s12">
+	          <textarea id="comments" class="materialize-textarea"></textarea>
+	          <label for="comments">Comments</label>
+	        </div>
+	     	<a class="waves-effect waves-light btn" onclick="stage4();$('#s5').hide();$('#s6').show()">Next</a>
+	      </div>
+
+    
+	</div>
+</div>
+
+
+
+
+<div class="row invis" id="s6">
+	<div class="input-field col s12">
+		<a class="waves-effect waves-light btn" onclick="addNew()">Save Patient</a>
+		<a class="waves-effect waves-light btn" onclick="save()">Create Spreadsheet</a>
+	</div>
+</div>
+
+
+
+
+<script type="text/javascript">
+var wards = ['Ward 1A','Ward 1B','Ward 1C','Ward 1D','Ward 1E','Ward 2A','Ward 2B','Ward 2C','Ward 2D','Ward 2E','Ward 3A','Ward 3Alpha','Ward 3B','Ward 3C','Ward 3D','Ward 3E Gyn','Ward 3E Med','Ward 3F','Ward 4A','Ward 4B','Ward 4C','Ward 4D','Ward 4E','Ward 4F','Ward 5A','Ward 5B','Ward 5C DMOP','Ward 5C Stroke','Ward 5D','Duffy','ED','OBS','SCBU','Seddon'];
+var antibiotics = ["Amoxicillin","Azithromycin","Aztreonam","Benzylpenicillin","Cefaclor","Cefalexin","Cefotaxime","Ceftazidime","CefTRIAXone","Cefuroxime","Chloramphenicol","Ciprofloxacin","Clarithromycin IV","Clarithromycin Oral","Clindamycin","Co-amoxiclav IV","Co-amoxiclav Oral","Co-trimoxazole","Doxycycline","Ertapenem","Erythromycin","Fidaxomicin", "Flucloxacillin","Fosfomycin Oral","Fusidic acid/Sodium fusidate","Gentamicin","Levofloxacin","Linezolid","Meropenem","Metronidazole","Nitrofurantoin","Phenoxymethylpenicillin(Pen V)","Pivmecillinam","Rifampicin","Tazocin(Piperacillin/tazobactam)","Teicoplanin","Tigecycline","Trimethoprim","Vancomycin"];
+var frequencyArr = ['OD','BD','TDS','QDS','1 hourly','2 hourly','3 hourly','36 hourly','3x weekly','4 hourly','48 hourly','5x daily','72 hourly','fortnightly','monthly','STAT','weekly','other'];
+function wardSelect(){
+	var str = "<option disabled selected>Ward</option>"
+	for(i = 0; i <wards.length; i++){
+		str+= '<option value="'+wards[i]+'">'+wards[i]+'</option>';
+	}
+	document.getElementById('wardSelect').innerHTML = str;
+}
+wardSelect();
+function allergy(){
+	var ac = document.getElementById('allergyChk');
+	var aInput = document.getElementById('allergyText');
+	if(ac.checked == true){
+		aInput.style.display = "block";
+	}else if(ac.checked == false){
+		aInput.style.display = "none";
+	}
+}
+function approval(){
+	var ac = document.getElementById('approvalChk');
+	if(ac.checked == true){
+		$('#approvalOpt').show();
+	}else if(ac.checked == false){
+		$('#approvalOpt').hide();
+	}
+}
+function antibioticSelect(){
+	var str = "<option disabled selected>Select Antibiotic</option>"
+	for(i = 0; i <antibiotics.length; i++){
+		str+= '<option value="'+antibiotics[i]+'">'+antibiotics[i]+'</option>';
+	}
+	document.getElementById('antibioticSelect').innerHTML = str;
+}
+antibioticSelect();
+function frequencySelect(){
+	var str = "<option disabled selected>Select Frequency</option>"
+	for(i = 0; i <frequencyArr.length; i++){
+		str+= '<option value="'+frequencyArr[i]+'">'+frequencyArr[i]+'</option>';
+	}
+	document.getElementById('FrequencySelect').innerHTML = str;
+}
+frequencySelect();
+var abxSelected;
+function antibioticSelected(){
+	abxSelected =  $('#antibioticSelect').val();
+	$('#s2').slideDown();
+}
+var hn;
+var con;
+var ward;
+var allergies;
+var alert;
+var antibiotic;
+var route;
+var dose;
+var freq;
+var dMissed;
+var dGiven;
+var dMissReason;
+var indicationDoc;
+var indication;
+var approved;
+var approvedReason;
+var stopDateDoc;
+var stopDate;
+var rv72;
+var rvOutcome;
+var reviewBy;
+var sample;
+var sampleViewed;
+var comments;
+function stage2(){
+	hn = $('#hnInput').val();
+	con = $('#conInput').val();
+	ward = $('#wardSelect option:selected').val();
+	var ac = document.getElementById('allergyChk');
+	if(ac.checked == true){
+		allergies = $('#allergyText').val();
+	}else if(ac.checked == false){
+		allergies = "NKDA"
+	}
+	alert = "";
+	if(document.getElementById('ICM').checked == true){
+		alert += "ICM ";
+	}
+	if(document.getElementById('ICC').checked == true){
+		alert += "ICC ";
+	}
+	if(document.getElementById('PTP').checked == true){
+		alert += "PTP ";
+	}
+	if(document.getElementById('VRE').checked == true){
+		alert += "VRE ";
+	}
+	antibiotic = $('#antibioticSelect option:selected').val();
+	route = $('input[name=route]:checked', '#doseForm').val();
+	dose = $('#doseInput').val();
+	freq = $('#FrequencySelect option:selected').val();
+	
+	if(hn.length < 1 || con.length < 1 || ward == "Ward"|| route == undefined || freq == undefined){
+		 M.toast({html: 'Enter All Required Information'})
+	}else{
+		$('#s1').slideUp();
+		$('#s2').slideUp();
+		$('#s3').slideDown();
+		$('#drugTitle').html(antibiotic + " " + route +" " + dose + " " + freq);
+	}
+}
+$("#dosesMissed").keyup(function() {
+	if($("#dosesMissed").val() > 0){
+		$("#reasonMissed").show();
+	}else if($("#dosesMissed").val() == 0){
+		$("#reasonMissed").hide();
+	}
+});
+	      
+	      
+function stage3(){
+	
+	dMissed = $('#dosesMissed').val();
+	dGiven = $('#dosesPrescribed').val();
+	dMissReason = "";
+	if(dMissed > 0){
+		dMissReason = $('#reasonMissed').val();
+	}
+	
+	if(document.getElementById('indicationDocumented').checked == true){
+		indicationDoc = "True";
+	}else if(document.getElementById('indicationDocumented').checked == false){
+		indicationDoc = "False";
+	}
+	indication = $('#indicationInput').val();
+	if(document.getElementById('approvalChk').checked == false){
+		approvedReason = "Not Approved";
+	}
+	approvedReason = $('input[name=approved]:checked', '#approvedForm').val()
+	
+	if(document.getElementById('stopDocumented').checked == true){
+		stopDateDoc = "True"; 
+	}else if(document.getElementById('stopDocumented').checked == false){
+		stopDateDoc = "False";
+	}
+	
+	stopDate = $('#rvDates').val(); 
+}
+function stage4(){
+	if(document.getElementById('rvDocumented').checked == true){
+		rv72 = "True";
+	}else if(document.getElementById('rvDocumented').checked == false){
+		rv72 = "False";
+	}
+	
+	rvOutcome = $('input[name=rv]:checked').val();
+	reviewBy =  $('input[name=rvBy]:checked').val();
+	
+	if(document.getElementById('sampleSentChk').checked == true){
+		sample = "True";
+	}else if(document.getElementById('sampleSentChk').checked == false){
+		sample = "False";
+	}
+	
+	sampleViewed = $('input[name=sampleRv]:checked').val();;
+	comments = $('#comments').val();
+}
+var d = new Date();
+var date = d.getDate() + "/" + (d.getMonth()+1) + "/" + d.getFullYear();
+var array = [];	
+function addNew(){
+	var arr = [];
+	arr.push('');
+	arr.push(date);
+	arr.push(ward);
+	arr.push(con);
+	arr.push(hn);
+	arr.push(allergies);
+	arr.push(alert);
+	arr.push(antibiotic);
+	arr.push(dose);
+	arr.push(freq);
+	arr.push(route);
+	arr.push(dMissed);
+	arr.push(dGiven);
+	arr.push(dMissReason);
+	arr.push(indication);
+	arr.push(indicationDoc);
+	arr.push(approvedReason);
+	arr.push(stopDateDoc);
+	arr.push(stopDate);
+	arr.push(sample);
+	arr.push(sampleViewed);	
+	arr.push(rv72);
+	arr.push(rvOutcome);
+	arr.push(comments);
+	arr.push('');
+	arr.push('');
+	arr.push(reviewBy);
+	arr.push('');
+	arr.push('');
+	arr.push('');
+	arr.push('');
+	array.push(arr);
+	console.log(array);
+	$('#s6').hide();
+	$('#s1').show();
+	hn = '';
+	con = '';
+	ward = '';
+	allergies = '';
+	alert = '';
+	antibiotic = '';
+	route = '';
+	dose = '';
+	freq = '';
+	dMissed = '';
+	dGiven = '';
+	dMissReason = '';
+	indicationDoc = '';
+	indication = '';
+	approved = '';
+	approvedReason = '';
+	stopDateDoc = '';
+	stopDate = '';
+	rv72 = '';
+	rvOutcome = '';
+	reviewBy = '';
+	sample = '';
+	sampleViewed = '';
+	comments = '';
+}
+	
+function save(){
+	const rows = array;
+	let csvContent = "data:text/csv;charset=utf-8,";
+	rows.forEach(function(rowArray){
+   	let row = rowArray.join(",");
+   	csvContent += row + "\r\n";
+	}); 
+	
+	var name = "spreadsheet " + date;
+	console.log(name);
+	var encodedUri = encodeURI(csvContent);
+	var link = document.createElement("a");
+	link.setAttribute("href", encodedUri);
+	link.setAttribute("download", name);
+	document.body.appendChild(link); // Required for FF
+	link.click();
+}
+//initialize materialize 
+$(document).ready(function(){
+    $('select').formSelect();
+  });
+$(document).ready(function(){
+    $('.collapsible').collapsible();
+  });
+$(document).ready(function(){
+    $('#allergyText').autocomplete({
+      data: {
+        "Amikacin": null,
+"Amoxicillin": null,
+"Ampicillin": null,
+"Azithromycin": null,
+"Aztreonam": null,
+"Benzathine benzylpenicillin": null,
+"Benzylpenicillin": null,
+"Cefaclor": null,
+"Cefadroxil": null,
+"Cefalexin": null,
+"Cefamandole": null,
+"Cefazolin": null,
+"Cefixime": null,
+"Cefotaxime": null,
+"Cefoxitin": null,
+"Cefpirome": null,
+"Cefpodoxime": null,
+"Cefprozil": null,
+"Cefradine": null,
+"Ceftaroline": null,
+"Ceftazidime": null,
+"Ceftobiprole": null,
+"Ceftolozane": null,
+"Ceftriaxone": null,
+"Cefuroxime": null,
+"Chloramphenicol": null,
+"Ciprofloxacin": null,
+"Clarithromycin": null,
+"Clindamycin": null,
+"Clofazimine": null,
+"Co-amoxiclav": null,
+"Co-fluampicil": null,
+"Colistimethate": null,
+"Colistin": null,
+"Co-trimoxazole": null,
+"Dalbavancin": null,
+"Daptomycin": null,
+"Delamanid": null,
+"Demeclocycline": null,
+"Doripenem": null,
+"Doxycycline": null,
+"Ertapenem": null,
+"Erythromycin": null,
+"Ethambutol": null,
+"Fidaxomicin": null,
+"Flucloxacillin": null,
+"Fosfomycin": null,
+"Fusidic Acid": null,
+"Gentamicin": null,
+"Imipenem": null,
+"Isoniazid": null,
+"Levofloxacin": null,
+"Linezolid": null,
+"Lymecycline": null,
+"Meropenem": null,
+"Methenamine": null,
+"Metronidazole": null,
+"Minocycline": null,
+"Moxifloxacin": null,
+"Nalidixic acid": null,
+"Netilmicin": null,
+"Nitrofurantoin": null,
+"Norfloxacin": null,
+"Ofloxacin": null,
+"Oxytetracycline": null,
+"Phenoxymethylpenicillin": null,
+"Piperacillin/Tazobactam": null,
+"Pivmecillinam": null,
+"Plazomicin": null,
+"Pristinamycin": null,
+"Procaine benzylpenicillin": null,
+"Pyrazinamide": null,
+"Quinupristin": null,
+"Rifampicin": null,
+"Streptomycin": null,
+"Sulfadiazine": null,
+"Sulfamethoxypyridazine": null,
+"Sulfinpyrazone": null,
+"Tedizolid": null,
+"Teicoplanin": null,
+"Telavancin": null,
+"Telithromycin": null,
+"Temocillin": null,
+"Tetracycline": null,
+"Ticarcillin/Clavulanic acid": null,
+"Tigecycline": null,
+"Tobramycin": null,
+"Trimethoprim": null,
+"Vancomycin": null
+      },
+    });
+    $('#indicationInput').autocomplete({
+      data: {
+      	"UTI":null,
+      	"LRTI":null
+      },
+    });
+    $('#rvDates').autocomplete({
+      data: {
+      	"UTI":null,
+      	"LRTI":null
+      },
+    });
+  });
+</script>
+
+</body>
+</html>
