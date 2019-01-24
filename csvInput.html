@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title></title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+</head>
+<body>
+
+
+<textarea id="textArea"></textarea>
+<button onclick="test()"> submit</button>
+
+<script type="text/javascript">
+	
+function test(){
+	var splitted = $('#textArea').val().split("\n");  
+    var arr = [];
+
+
+    for(i=0; i <splitted.length; i++){
+
+       var a = splitted[i];
+       var b = a.split(/(?:,| )+/) 
+       console.log(b);
+       arr.push(b);
+    }
+    console.log(arr);
+    
+
+         
+
+    
+
+    
+
+
+   
+}
+
+
+
+
+</script>
+</body>
+</html>
