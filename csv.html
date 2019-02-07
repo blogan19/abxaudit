@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html>
 <head>
 	<title></title>
@@ -19,37 +19,7 @@
     .centre{
       text-align: center;
     }
-
-  .slider {
-    -webkit-appearance: none;
-    width: 100%;
-    height: 5px;
-    border-radius: 5px;   
-    background: #d3d3d3;
-    outline: none;
-    opacity: 0.7;
-    -webkit-transition: .2s;
-    transition: opacity .2s;
-    margin-bottom: 10px;
-  }
-
-  .slider::-webkit-slider-thumb {
-    -webkit-appearance: none;
-    appearance: none;
-    width: 10px;
-    height: 10px;
-    border-radius: 50%; 
-    background: #4CAF50;
-    cursor: pointer;
-  }
-
-  .slider::-moz-range-thumb {
-    width: 25px;
-    height: 5px;
-    border-radius: 50%;
-    background: #4CAF50;
-    cursor: pointer;
-  }
+ 
   .btn-save{
     float: right;
     margin-right: 10px;
@@ -57,32 +27,41 @@
   .invis{
     display: none;
   }
+  .marginTop{
+    margin-top: 100px;
+  }
   </style>
 </head>
 <body>
 
+<nav class="navbar navbar-default navbar-fixed-top">
+  <div class="container">
+    <div class="container" id="inputBox">
+     <textarea id="textArea" class="txt"></textarea>
+     <button type="button" class="btn btn-block btn-primary" id="btnSubmit" onclick="test();disp();hideInput()"> submit</button>
+    </div> 
+    <br>
+    <div class="container">
+    <input class="form-control invis" id="myInput" type="text" placeholder="Search..">
+    <br>
+    <button class="btn btn-block btn-primary invis" id="btnSaveSpreadsheet" onclick="saveSpreadsheet()">Save Spreadsheet</button>
+    </div>
 
+  </div>
+</nav>
 
+  <div class="container marginTop">
+    <ul class="list-group" id="myList">  
+    </ul>  
+  </div>
 
-<div class="container">
-  <textarea id="textArea" class="txt"></textarea>
-  <button type="button" class="btn btn-block btn-primary" onclick="test();disp()"> submit</button>
-</div>
-
-<div class="container">
-  <h2>Filterable List</h2>
-  <p>Type something in the input field to search the list for specific items:</p>  
-  <input class="form-control" id="myInput" type="text" placeholder="Search..">
-  <br>
-  <button class="btn btn-block btn-primary invis" id="btnSaveSpreadsheet" onclick="saveSpreadsheet()">Save Spreadsheet</button>
-  <hr>
-  
-  <ul class="list-group" id="myList">  
-  </ul>  
-</div>
 
 <script type="text/javascript">
 
+function hideInput(){
+  document.getElementById('inputBox').style.display = "none";
+  document.getElementById('myInput').style.display = "block";
+}
 var abxConversion = [{
 "JAC": "ACICLOVIR 200 mg Dispersible Tablets",
 "CON":"Aciclovir"},
@@ -426,27 +405,68 @@ var abxConversion = [{
 "CON":"voriconazole"},
 {"JAC": "ZANAMIVIR 5 mg Dry Powder For Inhalation",
 "CON":"Zanamivir"}];
+
+var freqCon = [{"JAC": "Each day at 8pm",
+"CON":"OD"},
+{"JAC": "Each day at lunchtime (13:00)",
+"CON":"OD"},
+{"JAC": "Each day at teatime (18:00)",
+"CON":"OD"},
+{"JAC": "Each day in the morning (08:00)",
+"CON":"OD"},
+{"JAC": "Each night (22:00)",
+"CON":"OD"},
+{"JAC": "Every 12 hours at 10am and 10pm",
+"CON":"BD"},
+{"JAC":"Every 12 hours at 8am and 8pm",
+"CON":"BD"},
+{"JAC": "Every 4 hours (6 times a day)",
+"CON":"4 hourly"},
+{"JAC": "Every 8 hours (6am, 2pm and 10pm)",  
+"CON":"TDS"},
+{"JAC": "Every morning at 6am",
+"CON":"OD"},
+{"JAC": "Five times a day",
+"CON":"daily"},
+{"JAC": "Four times a day",
+"CON":"QDS"},
+{"JAC": "Four times a day (8am, 1pm, 6pm and 10pm)",
+"CON":"QDS"},
+{"JAC": "In the morning on Mondays, Wednesdays and Fridays",
+"CON":"3x weekly"},
+{"JAC": "Three times a day",
+"CON":"TDS"},
+{"JAC": "Three times a day - lunch, evening, night",
+"CON":"TDS"},
+{"JAC": "Three times a day (8am, 1pm and 10pm)",
+"CON":"TDS"},
+{"JAC": "Three times a day AM,TEA,ON",
+"CON":"TDS"},
+{"JAC": "Twice a day in the morning and at night",
+"CON":"BD"},
+{"JAC": "Twice a day in the morning and at teatime",
+"CON":"BD"},
+{"JAC": "Twice a day on Saturdays and Sundays only",
+"CON":"BD"}];
+
 var arr = [];
 function test(){
 	var splitted = $('#textArea').val().split("\n");  
  
     for(i=0; i <splitted.length; i++){
        var a = splitted[i];
-       var b = a.split(','); 
+       var b = a.split(';'); 
        arr.push(b);
     }   
 }
-
-var indicationArr = ['uti','resp','Gi'];
+var indicationArr = ["ABDO - Abscess","ABDO - Appendicitis","ABDO - Cholangitis","ABDO - Cholecystitis","ABDO - Collection","ABDO - Diverticulitis","ABDO - Infective Colitis","ABDO - Liver Abscess","ABDO - Pancreatitis","ABDO - Perforated Bowel","ABDO - Peritonitis","ABDO - Spontaneous Bacterial Peritonitis","ABDO - Surgical Site Infection","BONE - Discitis","BONE - Joint Infection","BONE - Open Fracture","BONE - Osteomyelitis","BONE - Prosthetic Implant Infection","BONE - Septic Arthritis","CNS - Brain Abscess","CNS - Meningitis","CVS - Infective Endocarditis","EAR - Otitis Externa","EAR - Otitis Media","EYE - Conjunctivitis","GI - C. Difficile Infection","GI - Campylobacter","GI - H. Pylori Eradication","GI - Variceal Bleeding","GUM - Bacteria Vaginosis","GUM - Epididymo Orchitis","GUM - Genital Tract Infection","GUM - Pelvic Inflammatory Disease","GUM - Prostatitis","GUM - Pyelonephritis","GUM - Renal Abscess","GUM - STD","GUM - UTI","GYN - Caesarean Section","No Clear Indication","OBS - Breast Abscess","OBS - Mastitis","OTHER","Prophylaxis","RESP - ASP Pneumonia","RESP - CAP","RESP - Croup","RESP - Empyema","RESP - Epiglottis","RESP - HAP","RESP - IECOPD","RESP - LRTI","RESP - Pneumocystis Pneumonia","RESP - Sinusitis","RESP - Tonsillitis","RESP - URTI","RESP - VAP","SEP - Bacteraemia","SEP - Biliary sepsis","SEP - Neutropenic Sepsis","SEP - Sepsis of Unknown Origin","SEP - Toxic Shock Syndrome","SEP - Urosepsis","SSTI - Abscess","SSTI - Animal Bite","SSTI - Burns/Grafts","SSTI - Cellulitis","SSTI - Diabetic Foot","SSTI - Human Bite","SSTI - Impetigo","SSTI - Infected Ulcers","SSTI - Line Infection","SSTI - Necrotising Fasciitis","SSTI - Phelbitis","SSTI - Puncture Wound","SSTI - Wound Infection"];;
 var indicationsStr= "";
 function indications(){
   for(i=0; i < indicationArr.length; i++){
     indicationsStr += '<option value="'+indicationArr[i]+'">'+indicationArr[i]+'</option>';
   }
-
 }
 indications();
-
 var outcome72hArr = ["Stop","Continue(to date given)","Continue(no date given)","Switch(escalation)","Switch(de-escalation)","witch(allergy/intolerance)","IVOST (to date given)","IVOST (no date given","OPAT"]; 
 var outcome72hStr = "<option selected>Review</option>";
 function outcome72h(){
@@ -455,26 +475,35 @@ function outcome72h(){
   }
 }
 outcome72h();
-
-
+rvDateArr = ["10 days","10 weeks","11 days","11 weeks","12 days","12 weeks","13 days","14 days","24 hours","3 days","3 weeks","36 hours","4 days","4 weeks","48 hours","5 days","5 weeks","6 days","6 weeks","7 days","7 weeks","8 days","8 weeks","9 days","9 weeks","lifelong","prolonged"];
+rvDateStr = '<option selected>Review Date</option>';
+function rvDateSel(){
+  for(var i=0; i<rvDateArr.length; i++){
+    rvDateStr += '<option value="'+rvDateArr[i]+'">'+rvDateArr[i]+'</option>';
+  }
+}
+rvDateSel();
 
 function disp(){
   var str =""; 
   for(i=0; i < arr.length; i++){
      var abx = arr[i][5];
+     var freq = arr[i][8];
      for(x=0; x <abxConversion.length; x++){
       if(abxConversion[x].JAC == abx) {
             abx = abxConversion[x].CON;
         }
+      for(y=0; y <freqCon.length; y++){
+        if(freqCon[y].JAC == freq){
+          freq = freqCon[y].CON;
+        }
+      }
     }  
-     str += '<li class="list-group-item" id="li'+i+'"><div class="row"><div class="col-xs-4"><h4>'+ arr[i][0] + '('+ arr[i][1] + ')' +'<h4></div><div class="col-xs-4"><h4>'+arr[i][2]+ '</h4></div><div class="col-xs-4"><h4>'+ arr[i][4] + ', ' + arr[i][3] +'</h4></div></div><div class="row"><div class="col-xs-12"><h4><span id="abxTxt'+i+'">'+ abx+'<span> '+arr[i][6] +'' +arr[i][7]+' '+arr[i][8]+' '+arr[i][9] +'</h4></div></div><hr><form id="inputForm"><div class="row"><div class="col-xs-6"><label class="checkbox-inline"><input type="checkbox" value="ICM" id="ICMchk'+i+'">ICM</label><label class="checkbox-inline"><input type="checkbox" value="ICC" id="ICCChk'+i+'">ICC</label><label class="checkbox-inline"><input type="checkbox" value="PTP" id="PTPChk'+i+'">PTP</label><label class="checkbox-inline"><input type="checkbox" value="VRE" id="VREChk'+i+'">VRE</label><label class="checkbox-inline"><input type="checkbox" value="MDRPSA" id="MDRPSAChk'+i+'">MDRPSA</label></div><div class="col-xs-2"><label class="checkbox-inline"><input type="checkbox"  id="nkda'+i+'" checked onclick="nkdaDisable('+i+')"> NKDA</label></div><div class="col-xs-4"><input class="form-control" placeholder="Allergies" type="text" id="allergyTxt'+i+'" disabled></div></div><hr><div class="row"><div class="col-xs-2"><input type="range" class="form-control-range slider" id="rangeMiss'+i+'" value="0" oninput="slider('+0+','+i+')" max="15">Missed doses:<span id=missedDosedisp'+i+'> 0</span></div><div class="col-xs-2"><input type="range" class="form-control-range slider" id="rangeGiven'+i+'" oninput="slider('+1+','+i+')" max="100">Given doses:<span id=givenDosedisp'+i+'></span></div><div class="col-xs-3"><input class="form-control" id="reasonMissTxt'+i+'" placeholder="Reason Missed" disabled></div><div class="col-xs-2"><label class="checkbox-inline"><input type="checkbox" id="indicationDocumented'+i+'">Indication Documented?</label></div><div class="col-xs-3"><select class="form-control" id="indicationSel'+i+'">'+indicationsStr+'</select></div></div><hr><div class="row"><div class="col-xs-12">Approved: <label class="checkbox-inline"><input type="radio" name="approvedRadios" id="asperPolicy'+i+'" value="Yes - As per policy"> Policy</label><label class="checkbox-inline"><input type="radio" value="" name="approvedRadios" id="asperAdvice'+i+'" value="Yes - As per advice"> Advice</label><label class="checkbox-inline"><input type="radio" name="approvedRadios" id="asperCulture'+i+'" value="As per culture"> Culture</label><label class="checkbox-inline"><input type="radio" name="approvedRadios" id="approvedRetrospectively'+i+'" value="Yes - Approved retrospectively"> Retrospectively</label><label class="checkbox-inline"><input type="radio" name="approvedRadios" id="notApproved'+i+'" value="No - not approved" checked> Not approved</label></div></div><hr><div class="row"><div class="col-xs-3"><label class="checkbox-inline"><input type="checkbox" id="rvDateDocumented'+i+'"> Stop/Review dated documented?</label></div><div class="col-xs-3"><input class="form-control" placeholder="Review Date" type="text" id="reviewDateTxt'+i+'"></div><div class="col-xs-3"><label class="checkbox-inline"><input type="checkbox" id="rv72'+i+'" onclick="chkOutcome('+i+')"> 72 hour review?</label></div><div class="col-xs-3"><select id="outcome72hsel'+i+'" class="form-control" disabled>'+outcome72hStr+'</select></div></div><hr><div class="row"><div class="col-xs-4"><select class="form-control" id="decisionBySel'+i+'"><option selected disabled>Review Decision By</option><option value="Senior Infection Doctor">Senior Infection Doctor</option><option value="Antibiotic Pharmacist">Antibiotic Pharmacist</option><option value="Senior Member of Team">Senior Member of Team</option><option value="Junior Member of Team">Junior Member of Team</option><option value="Other">Other</option></select></div><div class="col-xs-2"><label class="checkbox-inline"><input type="checkbox" id="sampleSentChk'+i+'"> Sample Sent?</label></div><div class="col-xs-6">Sample Reviewed?<label class="checkbox-inline"><input type="radio" name="sampleRadios" id="sampleYes'+i+'"> Yes</label><label class="checkbox-inline"><input type="radio" name="sampleRadios" id="sampleNo'+i+'"> No</label><label class="checkbox-inline"><input type="radio" name="sampleRadios" id="sampleNA'+i+'" checked> N/A</label></div></div></form><hr><div class="row"><div class="col-xs-9"><textarea class="form-control" placeholder="Comments..." id="commentsTxt"></textarea></div><div class="col-xs-3"><button class="btn btn-primary btn-save"  onclick="savePatient('+i+')"> Save Patient </button></div></div></li>';
+     str += '<li class="list-group-item" id="li'+i+'"><div class="row"><div class="col-xs-4"><h4>'+ arr[i][0] + '('+ arr[i][1] + ')' +'<h4></div><div class="col-xs-4"><h4>'+arr[i][2]+ '</h4></div><div class="col-xs-4"><h4>'+ arr[i][4] + ', ' + arr[i][3] +'</h4></div></div><div class="row"><div class="col-xs-12"><h4><span id="abxTxt'+i+'">'+ abx+'<span> '+arr[i][6] +'' +arr[i][7]+' '+ freq+' '+arr[i][9] +'</h4></div></div><hr><form id="inputForm"><div class="row"><div class="col-xs-6"><label class="checkbox-inline"><input type="checkbox" value="ICM" id="ICMchk'+i+'">ICM</label><label class="checkbox-inline"><input type="checkbox" value="ICC" id="ICCChk'+i+'">ICC</label><label class="checkbox-inline"><input type="checkbox" value="PTP" id="PTPChk'+i+'">PTP</label><label class="checkbox-inline"><input type="checkbox" value="VRE" id="VREChk'+i+'">VRE</label><label class="checkbox-inline"><input type="checkbox" value="MDRPSA" id="MDRPSAChk'+i+'">MDRPSA</label></div><div class="col-xs-2"><label class="checkbox-inline"><input type="checkbox"  id="nkda'+i+'" checked onclick="nkdaDisable('+i+')"> NKDA</label></div><div class="col-xs-4"><input class="form-control" placeholder="Allergies" type="text" id="allergyTxt'+i+'" disabled></div></div><hr><div class="row"><div class="col-xs-2"><input type="text" class="form-control" id="rangeMiss'+i+'" placeholder="Missed Doses" oninput="rangeMiss('+i+')"></div><div class="col-xs-2"><input type="text" class="form-control" id="rangeGiven'+i+'" placeholder="Doses Given"></div><div class="col-xs-3"><input class="form-control" id="reasonMissTxt'+i+'" placeholder="Reason Missed" disabled></div><div class="col-xs-2"><label class="checkbox-inline"><input type="checkbox" id="indicationDocumented'+i+'">Indication Documented?</label></div><div class="col-xs-3"><select class="form-control" id="indicationSel'+i+'">'+indicationsStr+'</select></div></div><hr><div class="row"><div class="col-xs-12">Approved: <label class="checkbox-inline"><input type="radio" name="approvedRadios" id="asperPolicy'+i+'" value="Yes - As per policy"> Policy</label><label class="checkbox-inline"><input type="radio" value="" name="approvedRadios" id="asperAdvice'+i+'" value="Yes - As per advice"> Advice</label><label class="checkbox-inline"><input type="radio" name="approvedRadios" id="asperCulture'+i+'" value="As per culture"> Culture</label><label class="checkbox-inline"><input type="radio" name="approvedRadios" id="approvedRetrospectively'+i+'" value="Yes - Approved retrospectively"> Retrospectively</label><label class="checkbox-inline"><input type="radio" name="approvedRadios" id="notApproved'+i+'" value="No - not approved"> Not approved</label></div></div><hr><div class="row"><div class="col-xs-3"><label class="checkbox-inline"><input type="checkbox" id="rvDateDocumented'+i+'"> Stop/Review dated documented?</label></div><div class="col-xs-3"><select id="reviewDateSel'+i+'" class="form-control">'+rvDateStr+'</select></div><div class="col-xs-3"><label class="checkbox-inline"><input type="checkbox" id="rv72'+i+'" onclick="chkOutcome('+i+')"> 72 hour review?</label></div><div class="col-xs-3"><select id="outcome72hsel'+i+'" class="form-control" disabled>'+outcome72hStr+'</select></div></div><hr><div class="row"><div class="col-xs-4"><select class="form-control" id="decisionBySel'+i+'"><option selected disabled>Review Decision By</option><option value="Senior Infection Doctor">Senior Infection Doctor</option><option value="Antibiotic Pharmacist">Antibiotic Pharmacist</option><option value="Senior Member of Team">Senior Member of Team</option><option value="Junior Member of Team">Junior Member of Team</option><option value="Other">Other</option></select></div><div class="col-xs-2"><label class="checkbox-inline"><input type="checkbox" id="sampleSentChk'+i+'"> Sample Sent?</label></div><div class="col-xs-6">Sample Reviewed?<label class="checkbox-inline"><input type="radio" name="sampleRadios" id="sampleYes'+i+'" value="Yes"> Yes</label><label class="checkbox-inline"><input type="radio" name="sampleRadios" id="sampleNo'+i+'" value="No"> No</label><label class="checkbox-inline"><input type="radio" name="sampleRadios" id="sampleNA'+i+'" value="N/A" checked> N/A</label></div></div></form><hr><div class="row"><div class="col-xs-9"><textarea class="form-control" placeholder="Comments..." id="commentsTxt'+i+'"></textarea></div><div class="col-xs-3"><button class="btn btn-primary btn-save"  onclick="savePatient('+i+')"> Save Patient </button></div></div></li>';
      
   }
-
   document.getElementById('myList').innerHTML = str;
 }
-
-
 function nkdaDisable(id){
   var chk = document.getElementById('nkda'+id);
   var txt = document.getElementById('allergyTxt'+id);
@@ -485,20 +514,13 @@ function nkdaDisable(id){
     txt.disabled = false;
   }
 }
-
-function slider(type, sliderId){
-  if(type == 0){
-    var n = document.getElementById('rangeMiss'+sliderId).value;
-    document.getElementById('missedDosedisp' + sliderId).innerHTML = " "+ n;
-    document.getElementById('reasonMissTxt'+sliderId).disabled = false;
-  }else if(type == 1){
-    var x = document.getElementById('rangeGiven'+sliderId).value;
-    document.getElementById('givenDosedisp' + sliderId).innerHTML = " "+ x;
-  }  
+function rangeMiss(id){
+  var v = document.getElementById('rangeMiss'+id).value;
+  if(v > 0){
+     document.getElementById('reasonMissTxt'+id).disabled = false;
+  }
+ 
 }
-
-
-
 function chkOutcome(id){
   var chk = document.getElementById('rv72'+id);
   var sel = document.getElementById('outcome72hsel' + id);
@@ -508,16 +530,15 @@ function chkOutcome(id){
     sel.disabled = true;
   }
 }
-
 var d = new Date();
 var date = d.getDate() + "/" + (d.getMonth()+1) + "/" + d.getFullYear();
-
 var array = [];
 function savePatient(i){
     document.getElementById('btnSaveSpreadsheet').style.display = "block"
     document.getElementById('li'+i).style.opacity = 0.3;
     //ward, con, hn, allergies, alert, abx, dose, freq, route, dmissed, dgiven, dmissed reason, indication, indicationDoc, approvedREason, stopdatedoc, stopdate, sample, sampleviewed, rv72, rv outcome, comments, rvby
     var ward = arr[i][0];
+    ward = ward.replace(" WARD","");
     var cons = arr[i][1];
     var Hn   = arr[i][2];
     var allergies = "";
@@ -526,44 +547,87 @@ function savePatient(i){
     }else{
       allergies = "NKDA";
     }
-    var alert = "";
-    if(document.getElementById('ICMchk'+i).checked == true){alert+="ICM "};
-    if(document.getElementById('ICCChk'+i).checked == true){alert+="ICC "};
-    if(document.getElementById('PTPChk'+i).checked == true){alert+="PTP "};
-    if(document.getElementById('VREChk'+i).checked == true){alert+="VRE "};
-    if(document.getElementById('MDRPSAChk'+i).checked == true){alert+="MDRPSA "};
+    var alert = "Nil";
+    if(document.getElementById('ICMchk'+i).checked == true){alert = "";alert+="ICM "};
+    if(document.getElementById('ICCChk'+i).checked == true){alert = "";alert+="ICC "};
+    if(document.getElementById('PTPChk'+i).checked == true){alert = "";alert+="PTP "};
+    if(document.getElementById('VREChk'+i).checked == true){alert = "";alert+="VRE "};
+    if(document.getElementById('MDRPSAChk'+i).checked == true){alert = "";alert+="MDRPSA "};
     
-    var antibiotic = document.getElementById('abxTxt'+i).innerHTML;
-    var dose = arr[i][6]+arr[i][7];
+    var antibiotic = arr[i][5];
+    for(x=0; x <abxConversion.length; x++){
+      if(abxConversion[x].JAC == antibiotic) {
+            antibiotic = abxConversion[x].CON;
+        }
+      };
     var freq = arr[i][8];
-    var route = arr[i][9];
-    if(route == "Oral"){route = "PO"}
+  
+      for(y=0; y <freqCon.length; y++){
+        if(freqCon[y].JAC == freq){
+          freq = freqCon[y].CON;
+        }
+      }
 
+    var dose = arr[i][6]+arr[i][7];
+    var route = arr[i][9];
+    if(route == "Oral"){route = "PO"};
+    if(route == "Intravenous"){route = "IV"};
     var dMissed = document.getElementById('rangeMiss'+i).value;
     var dGiven = document.getElementById('rangeGiven'+i).value;
     var dMissedReason = document.getElementById('reasonMissTxt'+i).value;
     var indication = document.getElementById('indicationSel'+i).value;
     if(document.getElementById('indicationDocumented'+i).checked == true){var indicationDocumented = true} else{indicationDocumented = false};
-    var approvedReason = $('input[name=approvedRadios]:checked', '#inputForm').val();
+
+
+    var approvedReason = "";
+
+    if(document.getElementById('asperPolicy'+i+'').checked == true){
+      approvedReason = "Yes - As per policy";
+    }
+    if(document.getElementById('asperAdvice'+i+'').checked == true){
+      approvedReason = "Yes - As per advice";
+    }
+    if(document.getElementById('asperCulture'+i+'').checked == true){
+      approvedReason = "Yes - As per culture";
+    }
+    if(document.getElementById('approvedRetrospectively'+i+'').checked == true){
+      approvedReason = "Yes - Approved retrospectively";
+    }
+    if(document.getElementById('notApproved'+i+'').checked == true){
+      approvedReason = "No - not approved";
+    }
+
+    console.log(approvedReason);
     if(document.getElementById('rvDateDocumented'+i).checked == true){var rvDateDocumented = true} else{rvDateDocumented = false};
-    var stopdate = document.getElementById('reviewDateTxt'+i).value;
+    var stopdate = document.getElementById('reviewDateSel'+i+'').value;
+
+
     if(document.getElementById('rv72'+i).checked == true){var rv72h = true} else{rv72h = false};
     var reviewOutcome = document.getElementById('outcome72hsel'+i).value;
     var reviewer =  document.getElementById('decisionBySel'+i).value;
-
     if(document.getElementById('sampleSentChk'+i).checked == true){var sampleSent = true} else{sampleSent = false};
-    var samplesReviewed = $('input[name=sampleRadios]:checked', '#inputForm').val();
-    var comments = document.getElementById('commentsTxt').value;
+    var samplesReviewed ="";
+
+    if(document.getElementById('sampleYes'+i+'').checked == true){
+      samplesReviewed = "Yes";
+    }
+    
+    if(document.getElementById('sampleNo'+i+'').checked == true){
+      samplesReviewed = "No";
+    }
+    
+    if(document.getElementById('sampleNA'+i+'').checked == true){
+      samplesReviewed = "N/A";
+    }
 
 
+    console.log(samplesReviewed)
+    var comments = document.getElementById('commentsTxt'+i).value;
     var instanceArray = [];
     instanceArray.push('',date,ward,cons,Hn,allergies,alert,antibiotic,dose,freq,route,dMissed,dGiven,dMissedReason,indication,indicationDocumented,approvedReason,rvDateDocumented,stopdate,sampleSent,samplesReviewed,rv72h,reviewOutcome,comments,'','',reviewer);
     array.push(instanceArray)
     console.log(instanceArray);
-
-
 }
-
 function saveSpreadsheet(){
   const rows = array;
   let csvContent = "data:text/csv;charset=utf-8,";
@@ -580,19 +644,7 @@ function saveSpreadsheet(){
   link.setAttribute("download", name);
   document.body.appendChild(link); // Required for FF
   link.click();
-
-
-
 }
-
-
-
-
-
-
-
-
-
 //search function
 $(document).ready(function(){
   $("#myInput").on("keyup", function() {
@@ -602,6 +654,7 @@ $(document).ready(function(){
     });
   });
 });
+
 </script>
 </body>
 </html>
