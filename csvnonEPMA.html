@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title></title>
+     <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.0/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+  
+  <style type="text/css">
+    .txt{
+      width: 100%;
+      border: solid  black 0.5px;
+      border-radius: 5px;
+      margin-top: 10px;
+    }
+    .centre{
+      text-align: center;
+    }
+
+  .slider {
+    -webkit-appearance: none;
+    width: 100%;
+    height: 5px;
+    border-radius: 5px;   
+    background: #d3d3d3;
+    outline: none;
+    opacity: 0.7;
+    -webkit-transition: .2s;
+    transition: opacity .2s;
+    margin-bottom: 10px;
+  }
+
+  .slider::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 10px;
+    height: 10px;
+    border-radius: 50%; 
+    background: #4CAF50;
+    cursor: pointer;
+  }
+
+  .slider::-moz-range-thumb {
+    width: 25px;
+    height: 5px;
+    border-radius: 50%;
+    background: #4CAF50;
+    cursor: pointer;
+  }
+  .btn-save{
+    float: right;
+    margin-right: 10px;
+  }
+  .invis{
+    display: none;
+  }
+  </style>
+</head>
+<body>
+
+
+
+
+<div class="container">
+  <textarea id="textArea" class="txt"></textarea>
+  <button type="button" class="btn btn-block btn-primary" onclick="test();disp()"> submit</button>
+</div>
+
+<div class="container">
+  <h2>Filterable List</h2>
+  <p>Type something in the input field to search the list for specific items:</p>  
+  <input class="form-control" id="myInput" type="text" placeholder="Search..">
+  <br>
+  <button class="btn btn-block btn-primary invis" id="btnSaveSpreadsheet" onclick="saveSpreadsheet()">Save Spreadsheet</button>
+  <hr>
+  
+  <ul class="list-group" id="myList">  
+  </ul>  
+</div>
+
+
+<script type="text/javascript">
+
+
+var arr = [];
+function test(){
+	var splitted = $('#textArea').val().split("\n");  
+ 
+    for(i=0; i <splitted.length; i++){
+       var a = splitted[i];
+       var b = a.split(','); 
+       arr.push(b);
+    }   
+}
+
+
+var antibiotics = ["Select Antibiotic","Amoxicillin","Azithromycin","Aztreonam","Benzylpenicillin","Cefaclor","Cefalexin","Cefotaxime","Ceftazidime","CefTRIAXone","Cefuroxime","Chloramphenicol","Ciprofloxacin","Clarithromycin IV","Clarithromycin Oral","Clindamycin","Co-amoxiclav IV","Co-amoxiclav Oral","Co-trimoxazole","Doxycycline","Ertapenem","Erythromycin","Fidaxomicin", "Flucloxacillin","Fosfomycin Oral","Fusidic acid/Sodium fusidate","Gentamicin","Levofloxacin","Linezolid","Meropenem","Metronidazole","Nitrofurantoin","Phenoxymethylpenicillin(Pen V)","Pivmecillinam","Rifampicin","Tazocin(Piperacillin/tazobactam)","Teicoplanin","Tigecycline","Trimethoprim","Vancomycin"];
+var abxStr = "<option selected> Antibiotic </option>"
+function abx(){
+  for(var i=0; i < antibiotics.length; i++){
+    abxStr += '<option value="'+antibiotics[i]+'">'+antibiotics[i]+'</option>';
+  }
+}
+abx();
+
+var routeStr = "<option selected> Route </option>";
+var routeArr = ["IV","PO","NG","PEG","SC","IM"];
+function route(){
+  for(var i = 0; i <routeArr.length; i++){
+    routeStr += '<option value="'+routeArr[i]+'">'+routeArr[i]+'</option>';
+  }
+}
+route();
+
+function disp(){
+  var str =""; 
+  for(i=0; i < arr.length; i++){
+  
+     str += '<li class="list-group-item" id="li'+i+'"><div class="row"><div class="col-xs-4"><h4>'+ arr[i][0] + '('+ arr[i][1] + ')' +'<h4></div><div class="col-xs-4"><h4>'+arr[i][2]+ '</h4></div><div class="col-xs-4"><h4>'+ arr[i][4] + ', ' + arr[i][3] +'</h4></div></div><div class="row"><div class="col-xs-12"></div></div><hr><div class="row"><div class="col-xs-4"><select class="form-control" id="abxSelect'+i+'">'+abxStr+'</select></div><div class="col-xs-2"><input type="text" class="form-control" id="dose'+i+'" placeholder="Dose"></div><div class="col-xs-2"><select class="form-control" id="freqSelect'+i+'"></select></div><div class="col-xs-2"><select class="form-control" id="routeSelect'+i+'">'+routeStr+'</select></div></div></li>';
+     
+  }
+  document.getElementById('myList').innerHTML = str;
+}
+
+
+
+
+
+var d = new Date();
+var date = d.getDate() + "/" + (d.getMonth()+1) + "/" + d.getFullYear();
+
+var array = [];
+function savePatient(i){
+    document.getElementById('btnSaveSpreadsheet').style.display = "block"
+    document.getElementById('li'+i).style.opacity = 0.3;
+    //ward, con, hn, allergies, alert, abx, dose, freq, route, dmissed, dgiven, dmissed reason, indication, indicationDoc, approvedREason, stopdatedoc, stopdate, sample, sampleviewed, rv72, rv outcome, comments, rvby
+    var ward = arr[i][0];
+    var cons = arr[i][1];
+    var Hn   = arr[i][2];
+    var allergies = "";
+    if(document.getElementById("nkda"+i).checked == false){
+      allergies = document.getElementById("allergyTxt"+i).value;
+    }else{
+      allergies = "NKDA";
+    }
+    var alert = "";
+    if(document.getElementById('ICMchk'+i).checked == true){alert+="ICM "};
+    if(document.getElementById('ICCChk'+i).checked == true){alert+="ICC "};
+    if(document.getElementById('PTPChk'+i).checked == true){alert+="PTP "};
+    if(document.getElementById('VREChk'+i).checked == true){alert+="VRE "};
+    if(document.getElementById('MDRPSAChk'+i).checked == true){alert+="MDRPSA "};
+    
+    var antibiotic = document.getElementById('abxTxt'+i).innerHTML;
+    var dose = arr[i][6]+arr[i][7];
+    var freq = arr[i][8];
+    var route = arr[i][9];
+    if(route == "Oral"){route = "PO"}
+
+    var dMissed = document.getElementById('rangeMiss'+i).value;
+    var dGiven = document.getElementById('rangeGiven'+i).value;
+    var dMissedReason = document.getElementById('reasonMissTxt'+i).value;
+    var indication = document.getElementById('indicationSel'+i).value;
+    if(document.getElementById('indicationDocumented'+i).checked == true){var indicationDocumented = true} else{indicationDocumented = false};
+    var approvedReason = $('input[name=approvedRadios]:checked', '#inputForm').val();
+    if(document.getElementById('rvDateDocumented'+i).checked == true){var rvDateDocumented = true} else{rvDateDocumented = false};
+    var stopdate = document.getElementById('reviewDateTxt'+i).value;
+    if(document.getElementById('rv72'+i).checked == true){var rv72h = true} else{rv72h = false};
+    var reviewOutcome = document.getElementById('outcome72hsel'+i).value;
+    var reviewer =  document.getElementById('decisionBySel'+i).value;
+
+    if(document.getElementById('sampleSentChk'+i).checked == true){var sampleSent = true} else{sampleSent = false};
+    var samplesReviewed = $('input[name=sampleRadios]:checked', '#inputForm').val();
+    var comments = document.getElementById('commentsTxt').value;
+
+
+    var instanceArray = [];
+    instanceArray.push('',date,ward,cons,Hn,allergies,alert,antibiotic,dose,freq,route,dMissed,dGiven,dMissedReason,indication,indicationDocumented,approvedReason,rvDateDocumented,stopdate,sampleSent,samplesReviewed,rv72h,reviewOutcome,comments,'','',reviewer);
+    array.push(instanceArray)
+    console.log(instanceArray);
+
+
+}
+
+function saveSpreadsheet(){
+  const rows = array;
+  let csvContent = "data:text/csv;charset=utf-8,";
+  rows.forEach(function(rowArray){
+    let row = rowArray.join(",");
+    csvContent += row + "\r\n";
+  }); 
+  
+  var name = "spreadsheet " + date;
+  console.log(name);
+  var encodedUri = encodeURI(csvContent);
+  var link = document.createElement("a");
+  link.setAttribute("href", encodedUri);
+  link.setAttribute("download", name);
+  document.body.appendChild(link); // Required for FF
+  link.click();
+
+
+
+}
+
+
+
+
+
+
+
+
+
+//search function
+$(document).ready(function(){
+  $("#myInput").on("keyup", function() {
+    var value = $(this).val().toLowerCase();
+    $("#myList li").filter(function() {
+      $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+    });
+  });
+});
+</script>
+</body>
+</html>
